@@ -19,13 +19,15 @@ function App() {
 
   const onSubmitProduct = async (e) => {
     e.preventDefault();
-
-    const resultData = await fetch('http://localhost:8081/seller/show-bids/' + productId)
-    const jsonResultData = await resultData.json()
-    //console.log("product = "+JSON.stringify(jsonResultData.product));
-    //console.log("buyers = "+JSON.stringify(jsonResultData.buyers));
-    setProductDetails(jsonResultData.product);
-    setBuyerDetails(jsonResultData.buyers)
+    if(productId === 'reset'){
+      setProductDetails('');
+      setBuyerDetails('');
+    }else{
+      const resultData = await fetch('http://localhost:8081/seller/show-bids/' + productId)
+      const jsonResultData = await resultData.json()      
+      setProductDetails(jsonResultData.product);
+      setBuyerDetails(jsonResultData.buyers);
+    }
   };
 
 
@@ -52,7 +54,7 @@ function App() {
             <li style={{border:'1px solid black', marginLeft: '250px', padding:'5px', backgroundColor:'#D3D3D3'}}>Product</li>
             <li>
             <select class="mySelect" name="productId" onChange={getProductId}>
-                  <option value="">Please select</option>
+                  <option value="reset">Please select</option>
                   {products && products.map(product =>
 
                     <option key={product.id} value={product.id}>{product.productName}</option>
