@@ -9,6 +9,8 @@ function App() {
   const [buyers, setBuyerDetails] = useState([])
   const [productId, setState] = useState([])
 
+  const buyerList = [...buyers].sort((a, b) => b.bidAmount - a.bidAmount);
+
 
   const getProductId = (e) => {
     //console.log("onchange = "+e.target.value);
@@ -23,7 +25,7 @@ function App() {
       setProductDetails('');
       setBuyerDetails('');
     }else{
-      const resultData = await fetch('https://eauction-seller.azurewebsites.net/seller/show-bids/' + productId)
+      const resultData = await fetch('https://eauction-buyer.azurewebsites.net/seller/show-bids/' + productId)
       const jsonResultData = await resultData.json()      
       setProductDetails(jsonResultData.product);
       setBuyerDetails(jsonResultData.buyers);
@@ -33,7 +35,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('https://eauction-seller.azurewebsites.net/seller/getProducts')
+      const result = await fetch('https://eauction-buyer.azurewebsites.net/seller/getProducts')
       const jsonResult = await result.json()
 
       setProducts(jsonResult);
@@ -107,7 +109,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {buyers && buyers.map(buyer =>
+          {buyerList && buyerList.map(buyer =>
 
             <tr>
               <td className="tdBorder">{buyer.bidAmount}</td>
